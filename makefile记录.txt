@@ -1,4 +1,4 @@
-Mkefile 记录:
+﻿Mkefile 记录:
 
 ## 是makefile的 注释
 @ 表明不回显执行的命令
@@ -45,7 +45,87 @@ $< 	规则的第一个依赖
 等等....
 
 特殊变量:
-$(MAKE)				当前make解释器的文件名
+$(MAKE)			当前make解释器的文件名
 $(MAKECMDGOALS) 	make 的命令行参数
 $(MAKEFILE_LIST)	获取make 所需要处理的makefile 文件列表
+$(MAKE_VERSION)		make 解释器的版本
+$(CURDIR)			Makefile 的目录
+$(.VARIABLES)		所有已经定义的变量名列表
+$(RM)				rm -f
+
+
+变量值的替换
+$(var:a=b)			将var变量中的 后缀 a 替换为 b (格式中不能有空格)
+
+example:
+	src := a.c b.c
+	obj := $(src:c=o)	#obj => a.o b.o
+
+变量的模式替换
+$(var:a%b=x%y)		将var变量中的 a 变量替换为 x , b 变量替换为 y , %表示保留变量值中的指定符
+
+example:
+	xx := aaabbbccc aaaeeeccc
+	kk := $(xx:aaa%ccc=yyy%kkk)
+
+	kk => yyybbbkkk yyyeeekkk
+
+规则的模式替换：
+
+exampl：
+	OBJS := a.o b.o
+	$(OBJS) : %.o : %.c		(%.o 匹配 OBJS 中的.o 字符串 %.c 则是将 %.o匹配好的字符串替换)
+		gcc -o $@ -c $^			
+		
+	==>
+		a.o : a.c
+			gcc -o $@ -c $^
+		
+		b.o : b.c
+			gcc -o $@ -c $^
+
+变量值的嵌套引用
+使用一个变量表示另一个变量
+
+example:
+	x := y
+	y := z
+	a := $($(x))  
+	
+	
+命令行变量
+运行 make 时在命令行定义变量
+当命令行定义的变量与已经定义的变量名重复 就覆盖原有变量值
+
+example:
+	hm := hello 
+	test:
+		@echo "hm=> $(hm)"
+
+	make hm=cmd		==>hm=>cmd
+
+
+override 关键字
+用于指定变量不能被覆盖
+
+override var := xxx
+
+
+define 关键字
+定义多行变量	用endef结束
+
+define foo	(变量名)
+xxxxx		(值)
+endef
+
+override define cmd
+	@echo "xxxx"	(命令)
+	@ls				(命令)
+endef
+
+
+
+
+
+
 

@@ -1,21 +1,19 @@
 
 TARGET := hello.out
+OBJS := func.o main.o const.o
 CC := gcc
 
-$(TARGET) : main.o func.o
+$(TARGET) : $(OBJS)
 	$(CC) -o $@ $^
 	
 	@echo "$(MAKE)"
 	@echo "$(MAKECMDGOALS) "
 	@echo "$(MAKEFILE_LIST)"
 
-main.o : main.c
+$(OBJS) : %.o : %.c
 	$(CC) -o $@ -c $<
-
-func.o : func.c
-	$(CC) -o $@ -c $<
-
-
+	
+	
 .PHONY : rebuild clean test
 
 rebuild : clean all test
@@ -23,20 +21,27 @@ rebuild : clean all test
 all : $(TARGET)
 
 clean : 
-	rm *.o $(TARGET)
+	$(RM) *.o $(TARGET)
 
 
 #######################
-first :
-	@echo "first"
-	
-second :
-	@echo "second"
-	
-third :
-	@echo "third"
+
+xx := aaabbbccc aaaeeeccc
+kk := $(xx:aaa%ccc=yyy%kkk)
+
+override define cmd
+	@echo "xxxx"	
+	@ls	-l			
+endef
 
 test:
-	@$(MAKE) first
-	@$(MAKE) second
-	@$(MAKE) third
+#	@$(MAKE) first
+#	@$(MAKE) second
+#	@$(MAKE) third
+	
+	@echo "$(hm)"
+	$(cmd)
+	
+
+
+	
