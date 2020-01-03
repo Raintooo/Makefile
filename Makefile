@@ -29,10 +29,13 @@ clean :
 xx := aaabbbccc aaaeeeccc
 kk := $(xx:aaa%ccc=yyy%kkk)
 
-override define cmd
+define cmd
 	@echo "xxxx"	
 	@ls	-l			
 endef
+
+var := DT
+%t : var := test
 
 test:
 #	@$(MAKE) first
@@ -41,7 +44,41 @@ test:
 	
 	@echo "$(hm)"
 	$(cmd)
-	
+	@echo "$(var)"
 
+var1 := a
+var2 := $(var1)
+var3 :=
+
+testif:
+ifeq ($(var1),$(var2))
+	@echo "var1 = var2"
+else
+	@echo “var != var2”
+endif
+
+ifneq ($(var2),)
+	@echo "var2 = "
+else
+	@echo “var2 != ”
+endif
+
+ifdef var2
+	@echo "var2"
+else
+	@echo “no var2”
+endif
+
+ifndef var3
+	@echo "no var3"
+else
+	@echo “var3”
+endif
+
+
+
+
+
+	
 
 	
