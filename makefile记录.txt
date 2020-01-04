@@ -92,6 +92,10 @@ exampl：
 		
 		b.o : b.c
 			gcc -o $@ -c $^
+针对目录结构的 规则的模式替换：
+	%.o : %.c
+		gcc -o $@ -c $^
+把目录中所有.c文件替换为.o文件再逐一对其进行规则运行
 
 变量值的嵌套引用
 使用一个变量表示另一个变量
@@ -188,9 +192,14 @@ test:
 	$(call func1)
 	$(call func1, XXXXX)
 	
-	
-	
-	
+预定义函数
+makefile 提供处理文件名, 变量, 命令的函数
+
+var := $(func arg1, arg2)
+
+$(wildcard param)			将自动获取当前目录的满足 param 的文件
+$(addprefix prefix, names)	给名字列表 names 的每个名字增加一个前缀 prefix
+$()
 	
 	
 	
