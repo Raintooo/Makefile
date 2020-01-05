@@ -1,3 +1,4 @@
+#include "func.h"
 
 extern void func();
 

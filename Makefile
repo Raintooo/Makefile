@@ -1,38 +1,78 @@
 
+TARGET := hello.out
+OBJS := func.o main.o const.o
 CC := gcc
-MKDIR := mkdir
-RM := rm -rf
 
-DIR_TARGET := targets
-DIR_OBJS := objs
-DIRS := $(DIR_TARGET) $(DIR_OBJS)
-
-SRCS := $(wildcard *.c)
-OBJS := $(SRCS:.c=.o)
-
-OBJS := $(addprefix $(DIR_OBJS)/, $(OBJS))
-TARGET := $(DIR_TARGET)/hello.out
-
-$(TARGET) : $(DIRS) $(OBJS)
-	$(CC) -o $@ $(OBJS)
+$(TARGET) : $(OBJS)
+	$(CC) -o $@ $^
 	
-$(DIR_OBJS)/%.o : %.c
-    ifeq ($(DEBUG),true)
-		$(CC) -o $@ -c -g $^
-		@echo "debug version"
-    else
-		$(CC) -o $@ -c $^
-		@echo "release version"
-    endif
-		
-$(DIRS) : 
-	$(MKDIR) $@
-	
-.PHONY : clean rebuild all
+	@echo "$(MAKE)"
+	@echo "$(MAKECMDGOALS) "
+	@echo "$(MAKEFILE_LIST)"
 
-rebuild : clean all
+$(OBJS) : %.o : %.c
+	$(CC) -o $@ -c $<
+	
+	
+.PHONY : rebuild clean test
+
+rebuild : clean all test
 
 all : $(TARGET)
 
 clean : 
-	$(RM) $(DIRS)
+	$(RM) *.o $(TARGET)
+
+
+#######################
+
+xx := aaabbbccc aaaeeeccc
+kk := $(xx:aaa%ccc=yyy%kkk)
+
+define cmd
+	@echo "xxxx"	
+	@ls	-l			
+endef
+
+var := DT
+%t : var := test
+
+test:
+	mkdir test;cd test;mkdir subtest
+
+var1 := a
+var2 := $(var1)
+var3 :=
+
+testif:
+ifeq ($(var1),$(var2))
+	@echo "var1 = var2"
+else
+	@echo “var != var2”
+endif
+
+ifneq ($(var2),)
+	@echo "var2 = "
+else
+	@echo “var2 != ”
+endif
+
+ifdef var2
+	@echo "var2"
+else
+	@echo “no var2”
+endif
+
+ifndef var3
+	@echo "no var3"
+else
+	@echo “var3”
+endif
+
+
+
+
+
+	
+
+	

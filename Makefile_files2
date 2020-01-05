@@ -1,0 +1,24 @@
+.PHONY : all clean
+
+CC := gcc 
+RM := rm -rf
+MKDIR := mkdir
+
+SRCS := $(wildcard *.c)
+DEPS := $(SRCS:.c=.d)
+DEPS_DIR := deps
+DEPS := $(addprefix $(DEPS_DIR)/,$(DEPS))
+
+include $(DEPS)
+
+all :
+	@echo "all"
+	
+$(DEPS_DIR) : 
+	$(MKDIR) $@
+
+$(DEPS_DIR)/%.d : $(DEPS_DIR) %.c
+	$(CC) -MM -E $(filter %.c,$^) | sed 's,\(.*\)\.o[ :]*,objs/\1.o : ,g' > $@
+	
+clean:
+	$(RM) $(DEPS_DIR) 
