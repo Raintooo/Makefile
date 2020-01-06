@@ -6,19 +6,46 @@ MKDIR := mkdir
 
 SRCS := $(wildcard *.c)
 DEPS := $(SRCS:.c=.d)
+OBJS := $(SRCS:.c=.o)
 DEPS_DIR := deps
+OBJS_DIR := objs
+EXES_DIR := exe
+EXE := app.out
+
 DEPS := $(addprefix $(DEPS_DIR)/,$(DEPS))
+EXE := $(addprefix $(EXES_DIR)/,$(EXE))
+OBJS := $(addprefix $(OBJS_DIR)/,$(OBJS))
 
-include $(DEPS)
+DIRS := $(DEPS_DIR) $(OBJS_DIR) $(EXES_DIR)
 
-all :
+all : $(DIRS) $(EXE) 
 	@echo "all"
+
+$(EXE) : $(OBJS)
+	$(CC) -o $@ $^
 	
-$(DEPS_DIR) : 
+$(OBJS_DIR)/%.o : %.c
+	$(CC) -o $@ -c $<
+
+ifeq ("$(MAKECMDGOALS)","all")
+include $(DEPS)
+endif
+
+ifeq ("$(MAKECMDGOALS)","")
+include $(DEPS)
+endif
+
+	
+$(DIRS) : 
 	$(MKDIR) $@
 
+ifeq ("$(wildcard $(DEPS_DIR))","")
 $(DEPS_DIR)/%.d : $(DEPS_DIR) %.c
-	$(CC) -MM -E $(filter %.c,$^) | sed 's,\(.*\)\.o[ :]*,objs/\1.o : ,g' > $@
+else
+$(DEPS_DIR)/%.d : %.c
+endif
+	@echo "creating $(@)"
+	@set -e;$(CC) -MM -E $(filter %.c,$^) | sed 's,\(.*\)\.o[ :]*,objs/\1.o $@: ,g' > $@
 	
 clean:
-	$(RM) $(DEPS_DIR) 
+	$(RM) $(DIRS) 
