@@ -1,7 +1,14 @@
 
 TARGET := hello.out
-OBJS := func.o main.o const.o
+OBJS := func.o main.o 
 CC := gcc
+
+SRC := src
+INC := inc
+CFLAGS := -I $(INC)
+
+GPATH := inc
+VPATH := src
 
 $(TARGET) : $(OBJS)
 	$(CC) -o $@ $^
@@ -10,8 +17,10 @@ $(TARGET) : $(OBJS)
 	@echo "$(MAKECMDGOALS) "
 	@echo "$(MAKEFILE_LIST)"
 
-$(OBJS) : %.o : %.c
-	$(CC) -o $@ -c $<
+
+
+$(OBJS) : %.o : %.c 
+	$(CC) $(CFLAGS) -o $@ -c $<
 	
 	
 .PHONY : rebuild clean test

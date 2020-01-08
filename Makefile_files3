@@ -1,0 +1,53 @@
+.PHONY : clean all
+
+TYPE_SRC := .c
+TYPE_INC := .h
+TYPE_OBJ := .o
+
+DIR_SRC := src
+DIR_INC := inc
+DIR_BUILD := build
+
+CC := gcc
+MKDIR := mkdir
+RM := rm -rf
+
+LFLAGS := -pthread
+CFLAGS := -I $(DIR_INC)
+DEBUG := 
+
+ifeq ($(DEBUG),true)
+CFLAGS += -g
+endif
+
+SRC := $(wildcard $(DIR_SRC)/*$(TYPE_SRC))
+HDRS := $(wildcard $(DIR_INC)/*$(TYPE_INC))
+HDRS := $(notdir $(HDRS))
+OBJS := $(SRC:$(TYPE_SRC)=$(TYPE_OBJ))
+OBJS := $(patsubst $(DIR_SRC)/%, $(DIR_BUILD)/%, $(OBJS))
+
+APP := $(DIR_BUILD)/app.out
+
+vpath %$(TYPE_INC) $(DIR_INC)
+vpath %$(TYPE_SRC) $(DIR_SRC)
+
+test:
+	@echo "$(SRC)"
+	@echo "$(HDRS)"
+	@echo "$(OBJS)"
+
+all : $(DIR_BUILD) $(APP)
+	@echo "complie OK"
+
+$(DIR_BUILD) : 
+	$(MKDIR) $@
+	
+$(APP) : $(OBJS) 
+	$(CC) -o $@ $^
+	@echo "output: $(@)"
+	
+$(DIR_BUILD)/%$(TYPE_OBJ) : %$(TYPE_SRC) $(HDRS)
+	$(CC) $(CFLAGS) $(LFLAGS) -o $@ -c $<
+	
+clean : 
+	$(RM) $(DIR_BUILD)
