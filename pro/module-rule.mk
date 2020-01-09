@@ -18,6 +18,7 @@ DEPS := $(patsubst $(DIR_SRC)/%,$(DIR_OUTPUT)/%,$(DEPS))
 vpath %$(TYPE_SRC) $(DIR_SRC)
 vpath %$(TYPE_INC) $(DIR_INC)
 vpath %$(TYPE_INC) $(DIR_COMMON_INC)
+vpath %$(TYPE_INC) $(DIR_LIBS_INC)
 vpath %$(TYPE_DEP) $(DIR_OUTPUT)
 
 include $(DEPS)

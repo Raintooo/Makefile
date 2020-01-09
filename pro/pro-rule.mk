@@ -6,6 +6,8 @@ DIR_BUILD_SUB := $(addprefix $(DIR_BUILD)/,$(MODULE))
 
 MODULE_LIB := $(addsuffix .a,$(MODULE))
 MODULE_LIB := $(addprefix $(DIR_BUILD)/,$(MODULE_LIB))
+EXTERNAL_LIB := $(wildcard $(DIR_LIBS_LIB)/*)
+EXTERNAL_LIB := $(patsubst $(DIR_LIBS_LIB)/%, $(DIR_BUILD)/%, $(EXTERNAL_LIB))
 
 APP := $(addprefix $(DIR_BUILD)/,$(APP)) 
 
@@ -15,6 +17,7 @@ define MAKE_MODULE
 	&& make all DEBUG:=$(DEBUG) \
 	DIR_BUILD:=$(addprefix $(DIR_PROJECT)/,$(DIR_BUILD))\
 	DIR_COMMON_INC:=$(addprefix $(DIR_PROJECT)/,$(DIR_COMMON_INC))\
+	DIR_LIBS_INC:=$(addprefix $(DIR_PROJECT)/,$(DIR_LIBS_INC))\
 	MODULE_CFG:=$(addprefix $(DIR_PROJECT)/,$(MODULE_CFG))\
 	MODULE_CMD:=$(addprefix $(DIR_PROJECT)/,$(MODULE_CMD))\
 	MODULE_RULE:=$(addprefix $(DIR_PROJECT)/,$(MODULE_RULE))\
@@ -39,8 +42,11 @@ $(MODULE) : $(DIR_BUILD) $(DIR_BUILD)/$(MAKECMDGOALS)
 	
 $(DIR_BUILD_SUB) $(DIR_BUILD) : 
 	$(MKDIR) $@
+
+$(DIR_BUILD)/% : $(DIR_LIBS_LIB)/%
+	$(CP) $^ $@
 	
-link $(APP) :  $(MODULE_LIB)
+link $(APP) :  $(MODULE_LIB) $(EXTERNAL_LIB)
 	$(CC) $(LFLAGS) -o $(APP) -Xlinker "-(" $^ -Xlinker "-)" 	
 
 clean : 
