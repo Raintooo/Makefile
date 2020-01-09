@@ -1,45 +1,14 @@
-.PHONY : clean rebuild compile link
 
-MODULE := main common module
-
-MAKE := make
-MKDIR := mkdir
-RM := rm -rf
-CC := gcc
-CFLAGS := 
+PROJECT_CMD_CFG := cmd-cfg.mk
+PROJECT_PRO_CFG := pro-cfg.mk
+PROJECT_PRO_RULE := pro-rule.mk
 
 DIR_PROJECT := $(realpath .)
-DIR_BUILD := build
-DIR_BUILD_SUB := $(addprefix $(DIR_BUILD)/,$(MODULE))
 
-MODULE_LIB := $(addsuffix .a,$(MODULE))
-MODULE_LIB := $(addprefix $(DIR_BUILD)/,$(MODULE_LIB))
+#PROJECT_CMD_CFG := $(addprefix $(DIR_PROJECT)/,$(PROJECT_CMD_CFG))
+#PROJECT_PRO_CFG := $(addprefix $(DIR_PROJECT)/,$(PROJECT_PRO_CFG))
+#PROJECT_PRO_RULE := $(addprefix $(DIR_PROJECT)/,$(PROJECT_PRO_RULE))
 
-APP := app.out
-APP := $(addprefix $(DIR_BUILD)/,$(APP)) 
-
-all: compile $(APP)
-	@echo "success!! output => $(APP)"
-	
-
-compile : $(DIR_BUILD) $(DIR_BUILD_SUB)
-	@echo "compile start.."
-	@set -e;\
-	for dir in $(MODULE);\
-	do\
-		cd $$dir && make all DEBUG=$(DEBUG) && cd ..;\
-	done
-	
-	@echo "compile OK"
-	
-$(DIR_BUILD_SUB) $(DIR_BUILD) : 
-	$(MKDIR) $@
-	
-link $(APP) :  $(MODULE_LIB)
-	$(CC) $(CFLAGS) -o $(APP) -Xlinker "-(" $^ -Xlinker "-)" 
-	
-clean : 
-	$(RM) $(DIR_BUILD) $(APP)
-	
-rebuild : clean all
-	
+include $(PROJECT_CMD_CFG)
+include $(PROJECT_PRO_CFG)
+include $(PROJECT_PRO_RULE)
