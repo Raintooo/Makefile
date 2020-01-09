@@ -1,0 +1,4 @@
+/share_samba/My_Test/make_file/Makefile/pro/build/module/module.o /share_samba/My_Test/make_file/Makefile/pro/build/module/module.d: src/module.c \
+ /share_samba/My_Test/make_file/Makefile/pro/common/inc/func.h \
+ /share_samba/My_Test/make_file/Makefile/pro/common/inc/define.h \
+ /share_samba/My_Test/make_file/Makefile/pro/common/inc/define2.h

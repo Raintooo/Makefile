@@ -5,5 +5,5 @@ extern const char* g_hello;
 
 void func()
 {
-    printf("hello   %s\n", STR);
+    printf("hello    %s\n", STR);
 }

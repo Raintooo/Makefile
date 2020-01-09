@@ -3,7 +3,7 @@
 extern void func();
 
 
-int main()
+int common()
 {
     func();
     return 0;
