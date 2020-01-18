@@ -289,12 +289,52 @@ asm volatile(
 	  变量
 	  这条内嵌汇编是 打印语句
 
+=============================================================================================================
 
+10. GDB
 
+启动方式 
+gdb -> file app
+gdb app
+gdb app core (查看core文件)
 
+动态连接 (链接正在运行的 进程号为 pid 的 app, 链接后 app进程会停止)
+gdb app pid 
 
+断点类型
+-软件断点 (由非法指令触发)
+-硬件中断 由硬件特性实现 数量有限
+-数据断点 监测变量
 
+break 永久断点
+tbreak 临时断点
+hbreak 硬件中断
 
+show can-use-hw-watchpoints 查看硬件中断数量
+
+info breakpoints 查看断点信息
+delete 1 2 . n 删除断点
+enable 1 2 . n 使能断点
+disable 1 2 . n 关闭断点
+
+print name 查看变量 name  (print /a xx  打印变量地址)
+set var name=value 设置变量 name 为 value
+next 执行下一行
+next n 执行 n 行
+step 进入函数
+return [value] 强行函数返回
+finish 运行至函数返回
+until n 执行至 n 行
+jump n 跳转
+
+x /Nuf exp 查看指定内存地址值
+	N 打印单元数
+	u 单元大小
+	f 数据格式  x-16进账 d-有符号十进制  u-无符号十进制  o-八进制  t-二进制 a-地址  c-字符  f-浮点数
+	
+=============================================================================================================
+
+11. 深入理解程序结构
 
 
 
