@@ -317,6 +317,7 @@ delete 1 2 . n 删除断点
 enable 1 2 . n 使能断点
 disable 1 2 . n 关闭断点
 
+watch name 监测变量 
 print name 查看变量 name  (print /a xx  打印变量地址)
 set var name=value 设置变量 name 为 value
 next 执行下一行
@@ -326,11 +327,14 @@ return [value] 强行函数返回
 finish 运行至函数返回
 until n 执行至 n 行
 jump n 跳转
+display  /f expr 断点处自动打印变量
+whatis/ptype 查看变量类型符号
 
 x /Nuf exp 查看指定内存地址值
 	N 打印单元数
-	u 单元大小
+	u 单元大小	b-单字节  h-双字节  w-四字节  g-八字节
 	f 数据格式  x-16进账 d-有符号十进制  u-无符号十进制  o-八进制  t-二进制 a-地址  c-字符  f-浮点数
+
 	
 =============================================================================================================
 
